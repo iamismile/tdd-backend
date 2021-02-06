@@ -3,15 +3,15 @@ const app = require('../src/app');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
 
-beforeAll(() => {
+beforeAll(async () => {
   // Create tables for all defined models to the DB if it doesn't exist
   // and does nothing if it already exists
-  sequelize.sync();
+  await sequelize.sync();
 });
 
-beforeEach(() => {
+beforeEach(async () => {
   // To destroy everything in the table
-  User.destroy({ truncate: true });
+  await User.destroy({ truncate: true });
 });
 
 describe('User Registration', () => {
