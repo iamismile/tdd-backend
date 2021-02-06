@@ -11,6 +11,7 @@
   "author": "Ismile Hossain",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "express": "^4.17.1",
     "sequelize": "^6.5.0",
     "sqlite3": "^5.0.1"
