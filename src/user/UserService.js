@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const User = require('./User');
 const EmailService = require('../email/EmailService');
 const sequelize = require('../config/database');
-const EmailException = require('../email/EamilException');
+const EmailException = require('../email/EmailException');
 
 const generateToken = (length) => {
   return crypto.randomBytes(length).toString('hex').substring(0, length);
