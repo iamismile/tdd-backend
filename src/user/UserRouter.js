@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator');
 const UserService = require('./UserService');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
+const basicAuthentication = require('../middleware/basicAuthentication');
 
 const router = express.Router();
 
@@ -75,6 +76,14 @@ router.get('/api/1.0/users/:id', async (req, res, next) => {
     res.send(user);
   } catch (err) {
     next(err);
+  }
+});
+
+router.put('/api/1.0/users/:id', basicAuthentication, async (req, res) => {
+  const authenticatedUser = req.authenticatedUser;
+  if (authenticatedUser) {
+    await UserService.updateUser(req.params.id, req.body);
+    return res.send();
   }
 });
 
