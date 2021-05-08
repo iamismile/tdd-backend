@@ -32,18 +32,28 @@ const addUser = async (user = { ...activeUser }) => {
 };
 
 const putUser = async (id = 5, body = null, options = {}) => {
-  const agent = request(app).put('/api/1.0/users/' + id);
+  let agent = request(app);
+
+  let token;
   if (options.auth) {
     const { email, password } = options.auth;
-    // const merged = `${email}:${password}`;
-    // const base64 = Buffer.from(merged).toString('base64');
-    // agent.set('Authorization', `Basic ${base64}`);
-    agent.auth(email, password);
+    const response = await agent.post('/api/1.0/auth').send({ email, password });
+    token = response.body.token;
   }
 
+  agent = request(app).put('/api/1.0/users/' + id);
   if (options.language) {
     agent.set('Accept-Language', options.language);
   }
+
+  if (token) {
+    agent.set('Authorization', `Bearer ${token}`);
+  }
+
+  if (options.token) {
+    agent.set('Authorization', `Bearer ${options.token}`);
+  }
+
   return agent.send(body);
 };
 
@@ -114,6 +124,12 @@ describe('User Update', () => {
     const response = await putUser(inactiveUser.id, null, {
       auth: { email: 'user1@mail.com', password: 'P4ssword' },
     });
+    expect(response.status).toBe(403);
+  });
+
+  it('returns 403 when token is not valid', async () => {
+    const savedUser = await addUser();
+    const response = await putUser(savedUser.id, null, { token: '123' });
     expect(response.status).toBe(403);
   });
 });
