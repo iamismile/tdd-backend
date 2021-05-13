@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Token = require('../auth/Token');
 
 const User = sequelize.define(
   'User',
@@ -26,5 +27,7 @@ const User = sequelize.define(
     tableName: 'users',
   }
 );
+
+User.hasMany(Token, { onDelete: 'cascade', foreignKey: 'userId' });
 
 module.exports = User;

@@ -7,9 +7,6 @@ const Token = sequelize.define(
     token: {
       type: DataTypes.STRING,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-    },
   },
   {
     tableName: 'token',

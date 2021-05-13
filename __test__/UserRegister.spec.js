@@ -43,7 +43,7 @@ beforeEach(async () => {
   simulateSmtpFailure = false;
 
   // To destroy everything in the table
-  await User.destroy({ truncate: true });
+  await User.destroy({ truncate: { cascade: true } });
 });
 
 afterAll(async () => {
