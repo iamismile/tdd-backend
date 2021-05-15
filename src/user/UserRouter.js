@@ -4,7 +4,6 @@ const UserService = require('./UserService');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
 const ForbiddenException = require('../error/ForbiddenException');
-const tokenAuthentication = require('../middleware/tokenAuthentication');
 
 const router = express.Router();
 
@@ -64,7 +63,7 @@ router.post('/api/1.0/users/token/:token', async (req, res, next) => {
   }
 });
 
-router.get('/api/1.0/users', pagination, tokenAuthentication, async (req, res) => {
+router.get('/api/1.0/users', pagination, async (req, res) => {
   const { page, size } = req.pagination;
   const authenticatedUser = req.authenticatedUser;
 
@@ -81,7 +80,7 @@ router.get('/api/1.0/users/:id', async (req, res, next) => {
   }
 });
 
-router.put('/api/1.0/users/:id', tokenAuthentication, async (req, res, next) => {
+router.put('/api/1.0/users/:id', async (req, res, next) => {
   const authenticatedUser = req.authenticatedUser;
   // eslint-disable-next-line eqeqeq
   if (!authenticatedUser || authenticatedUser.id != req.params.id) {
@@ -92,7 +91,7 @@ router.put('/api/1.0/users/:id', tokenAuthentication, async (req, res, next) => 
   return res.send();
 });
 
-router.delete('/api/1.0/users/:id', tokenAuthentication, async (req, res, next) => {
+router.delete('/api/1.0/users/:id', async (req, res, next) => {
   const authenticatedUser = req.authenticatedUser;
 
   // eslint-disable-next-line eqeqeq

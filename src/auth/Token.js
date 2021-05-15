@@ -7,9 +7,13 @@ const Token = sequelize.define(
     token: {
       type: DataTypes.STRING,
     },
+    lastUsedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     tableName: 'token',
+    timestamps: false,
   }
 );
 
