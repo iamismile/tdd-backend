@@ -4,6 +4,7 @@ const UserService = require('./UserService');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
 const ForbiddenException = require('../error/ForbiddenException');
+const NotFoundException = require('../error/NotFoundException');
 
 const router = express.Router();
 
@@ -89,6 +90,15 @@ router.put('/api/1.0/users/:id', async (req, res, next) => {
 
   await UserService.updateUser(req.params.id, req.body);
   return res.send();
+});
+
+router.post('/api/1.0/password-reset', check('email').isEmail().withMessage('email_invalid'), (req) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ValidationException(errors.array());
+  }
+
+  throw new NotFoundException('email_not_inuse');
 });
 
 router.delete('/api/1.0/users/:id', async (req, res, next) => {
