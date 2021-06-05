@@ -22,6 +22,9 @@ const User = sequelize.define(
     activationToken: {
       type: DataTypes.STRING,
     },
+    passwordResetToken: {
+      type: DataTypes.STRING,
+    },
   },
   {
     tableName: 'users',
