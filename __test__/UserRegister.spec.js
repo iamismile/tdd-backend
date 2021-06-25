@@ -1,5 +1,6 @@
 const request = require('supertest');
 const SMTPServer = require('smtp-server').SMTPServer;
+const config = require('config');
 const app = require('../src/app');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
@@ -32,11 +33,12 @@ beforeAll(async () => {
     },
   });
 
-  server.listen(8587, 'localhost');
+  server.listen(config.mail.port, 'localhost');
 
   // Create tables for all defined models to the DB if it doesn't exist
   // and does nothing if it already exists
   await sequelize.sync();
+  jest.setTimeout(20000);
 });
 
 beforeEach(async () => {
@@ -48,6 +50,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
   await server.close();
+  jest.setTimeout(5000);
 });
 
 const validUser = {
