@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const User = require('./User');
 const EmailService = require('../email/EmailService');
+const ToeknService = require('../auth/TokenService');
 const sequelize = require('../config/database');
 const EmailException = require('../email/EmailException');
 const InvalidTokenException = require('./InvalidTokenException');
@@ -96,6 +97,22 @@ const passwordResetRequest = async (email) => {
   }
 };
 
+const updatePassword = async (updateRequest) => {
+  const user = await findByPasswordResetToken(updateRequest.passwordResetToken);
+  const hash = await bcrypt.hash(updateRequest.password, 10);
+  user.password = hash;
+  user.passwordResetToken = null;
+  user.activationToken = null;
+  user.inactive = false;
+  await user.save();
+
+  await ToeknService.clearTokens(user.id);
+};
+
+const findByPasswordResetToken = async (token) => {
+  return await User.findOne({ where: { passwordResetToken: token } });
+};
+
 module.exports = {
   save,
   findByEmail,
@@ -105,4 +122,6 @@ module.exports = {
   updateUser,
   deleteUser,
   passwordResetRequest,
+  updatePassword,
+  findByPasswordResetToken,
 };
