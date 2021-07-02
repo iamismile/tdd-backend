@@ -87,8 +87,8 @@ router.put('/api/1.0/users/:id', async (req, res, next) => {
     return next(new ForbiddenException('unauthroized_user_update'));
   }
 
-  await UserService.updateUser(req.params.id, req.body);
-  return res.send();
+  const user = await UserService.updateUser(req.params.id, req.body);
+  return res.send(user);
 });
 
 router.post('/api/1.0/user/password', check('email').isEmail().withMessage('email_invalid'), async (req, res, next) => {
