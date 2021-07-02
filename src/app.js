@@ -6,6 +6,7 @@ const errorHandler = require('./error/ErrorHandler');
 const UserRouter = require('./user/UserRouter');
 const AuthenticationRouter = require('./auth/AuthenticationRouter');
 const tokenAuthentication = require('./middleware/tokenAuthentication');
+const FileService = require('./file/FileService');
 
 const app = express();
 
@@ -25,6 +26,8 @@ i18next
       lookupHeader: 'accept-language',
     },
   });
+
+FileService.createFolders();
 
 app.use(middleware.handle(i18next));
 
