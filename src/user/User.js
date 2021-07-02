@@ -25,6 +25,9 @@ const User = sequelize.define(
     passwordResetToken: {
       type: DataTypes.STRING,
     },
+    image: {
+      type: DataTypes.STRING,
+    },
   },
   {
     tableName: 'users',

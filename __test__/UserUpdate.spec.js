@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const request = require('supertest');
 const bcrypt = require('bcrypt');
 const app = require('../src/app');
@@ -131,5 +133,19 @@ describe('User Update', () => {
     const savedUser = await addUser();
     const response = await putUser(savedUser.id, null, { token: '123' });
     expect(response.status).toBe(403);
+  });
+
+  it('saves the user image when update contains image as base64', async () => {
+    const filePath = path.join('.', '__test__', 'resources', 'test-png.png');
+    const fileInBase64 = fs.readFileSync(filePath, { encoding: 'base64' });
+
+    const savedUser = await addUser();
+    const validUpdate = { username: 'user1-update', image: fileInBase64 };
+    await putUser(savedUser.id, validUpdate, {
+      auth: { email: savedUser.email, password: 'P4ssword' },
+    });
+
+    const inDBUser = await User.findOne({ where: { id: savedUser.id } });
+    expect(inDBUser.image).toBeTruthy();
   });
 });
