@@ -37,7 +37,9 @@ beforeAll(async () => {
 
   // Create tables for all defined models to the DB if it doesn't exist
   // and does nothing if it already exists
-  await sequelize.sync();
+  if (process.env.NODE_ENV === 'test') {
+    await sequelize.sync();
+  }
   jest.setTimeout(20000);
 });
 

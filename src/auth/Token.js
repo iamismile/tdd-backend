@@ -12,7 +12,7 @@ const Token = sequelize.define(
     },
   },
   {
-    tableName: 'token',
+    tableName: 'tokens',
     timestamps: false,
   }
 );
